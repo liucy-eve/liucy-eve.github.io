@@ -119,6 +119,21 @@
     <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
@@ -220,25 +235,6 @@
     
     
     
-        
-
-  <div class="followme">
-    <p>欢迎关注我的其它发布渠道</p>
-
-    <div class="social-list">
-
-        <div class="social-item">
-          <a target="_blank" class="social-link" href="/atom.xml">
-            <span class="icon">
-              <i class="fa fa-rss"></i>
-            </span>
-
-            <span class="label">RSS</span>
-          </a>
-        </div>
-    </div>
-  </div>
-
 
       <footer class="post-footer">
 
@@ -246,6 +242,13 @@
 
 
         
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/20/%E7%AC%AC%E4%B8%80%E7%AF%87blog/" rel="next" title="第一篇blog">
+      第一篇blog <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
     
   </article>
@@ -319,7 +322,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -331,6 +334,12 @@
       </span>
       <span class="links-of-author-item">
         <a href="mailto:lcu405732@163.com" title="E-Mail → mailto:lcu405732@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2964821360" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2964821360" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
       </span>
   </div>
 
@@ -450,7 +459,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       owner       : 'liucy-eve',
       admin       : ['liucy-eve'],
       id          : 'a8bdf6a92fcaa242ea7833a7525c37bb',
-        language: '',
+        language: 'zh-CN',
       distractionFreeMode: true
     });
     gitalk.render('gitalk-container');
