@@ -28,8 +28,10 @@
 <meta property="og:description" content="Reids做为目前最流行的高速缓存中间件，不仅在工作中频繁使用到，在求职过程中也是面试的热点。Redis作为一个高并发中间件，如何保证高可用自然而然的成为了一个痛点。目前比较主流的Redis高可用架构方案为三种：主从模式，哨兵模式，分片模式。下面我们来分别聊一聊这三种架构方案。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%E4%B8%BB%E4%BB%8E.png">
+<meta property="og:image" content="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%E5%93%A8%E5%85%B5.png">
+<meta property="og:image" content="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%20Cluster.png">
 <meta property="article:published_time" content="2020-04-01T07:31:10.147Z">
-<meta property="article:modified_time" content="2020-04-01T07:31:33.148Z">
+<meta property="article:modified_time" content="2020-04-01T07:36:19.476Z">
 <meta property="article:author" content="liucy">
 <meta property="article:tag" content="中间件">
 <meta property="article:tag" content="redis">
@@ -193,7 +195,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-01 15:31:10 / 修改时间：15:31:33" itemprop="dateCreated datePublished" datetime="2020-04-01T15:31:10+08:00">2020-04-01</time>
+              <time title="创建时间：2020-04-01 15:31:10 / 修改时间：15:36:19" itemprop="dateCreated datePublished" datetime="2020-04-01T15:31:10+08:00">2020-04-01</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,7 +220,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -239,28 +241,13 @@
       
         <p>Reids做为目前最流行的高速缓存中间件，不仅在工作中频繁使用到，在求职过程中也是面试的热点。Redis作为一个高并发中间件，如何保证高可用自然而然的成为了一个痛点。目前比较主流的Redis高可用架构方案为三种：主从模式，哨兵模式，分片模式。下面我们来分别聊一聊这三种架构方案。</p>
 <a id="more"></a>
-<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p>###主从模式<br><img src="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%E4%B8%BB%E4%BB%8E.png" alt="主从模式"></p>
-<p>主从模式是三种模式中最简单，功能最单一的一种Redis集群模式，从上图可以看出在一主三从的模式下，客户端直接调用Master节点，Master节点再将数据同步到每个Slave节点。在这种模式下，Slave节点本质上是Master节点的一个数据备份，保证Master节点在异常宕机的情况下，无需同步数据或者极少数量的数据同步，就可以快速切换到Slave节点，保证业务的正常运行。但是这里的Master->Slave的切换并不是主从集群自动实现的，它需要由运维人员去手动操作。</p>
-###哨兵模式
-![哨兵模式](https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%E5%93%A8%E5%85%B5.png)
-<p>Redis Sentinel模式即哨兵模式，此模式下一般存在两种集群，一种是Sentinel集群，另一种是Redis集群，一个Sentinel集群可以监控多个Redis集群。正如上图描述的Redis Sentinel集群，在这个集群中，由哨兵1，哨兵2，哨兵3组成的哨兵集群对Redis集群1和Redis集群2同时进行监控。集群1和集群2都是采用了主从模式的Redis集群，但是整个集群的健康状态监控托管给了Sentinel集群，当某个集群内的Master节点发生宕机时，Sentinel自动将Slave节点替换为Master节点。可以看出哨兵模式比单纯的主从模式增加了故障迁移的处理，而这种处理是基于对Redis节点监控实现的。</p>
-###分片模式
-![分片模式](https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%20Cluster.png)
-<p>Redis Cluster模式即分片模式，从上图的三主三备的架构来看，Redis Cluster集群与上面两种集群最大的区别在于这种模式下存在多个Master节点。Redis 集群有16384个哈希槽,每个key通过CRC16校验后对16384取模来决定放置哪个槽.集群的每个节点负责一部分hash槽，在这种模式下对业务方来说，每次读写操作可能需要N次才能成功，N=Master节点数量。这种模式其实采用的是分布式系统横向拆分的一种思路，通过设置多个Master进行读写，那么Master节点本身的瓶颈就不再是问题。同时Master节点互相监控，相对于哨兵模式，少了Sentinel集群，系统复杂度和稳定性都更加优秀。因此Redis Cluster集群模式为Redis官方推荐的集群模式。</p>
-
-
-
+<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><h3 id="主从模式"><a href="#主从模式" class="headerlink" title="主从模式"></a>主从模式</h3><p><img src="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%E4%B8%BB%E4%BB%8E.png" alt="主从模式"><br>主从模式是三种模式中最简单，功能最单一的一种Redis集群模式，从上图可以看出在一主三从的模式下，客户端直接调用Master节点，Master节点再将数据同步到每个Slave节点。在这种模式下，Slave节点本质上是Master节点的一个数据备份，保证Master节点在异常宕机的情况下，无需同步数据或者极少数量的数据同步，就可以快速切换到Slave节点，保证业务的正常运行。但是这里的Master-&gt;Slave的切换并不是主从集群自动实现的，它需要由运维人员去手动操作。</p>
+<h3 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h3><p><img src="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%E5%93%A8%E5%85%B5.png" alt="哨兵模式"><br>Redis Sentinel模式即哨兵模式，此模式下一般存在两种集群，一种是Sentinel集群，另一种是Redis集群，一个Sentinel集群可以监控多个Redis集群。正如上图描述的Redis Sentinel集群，在这个集群中，由哨兵1，哨兵2，哨兵3组成的哨兵集群对Redis集群1和Redis集群2同时进行监控。集群1和集群2都是采用了主从模式的Redis集群，但是整个集群的健康状态监控托管给了Sentinel集群，当某个集群内的Master节点发生宕机时，Sentinel自动将Slave节点替换为Master节点。可以看出哨兵模式比单纯的主从模式增加了故障迁移的处理，而这种处理是基于对Redis节点监控实现的。</p>
+<h3 id="分片模式"><a href="#分片模式" class="headerlink" title="分片模式"></a>分片模式</h3><p><img src="https://liucy-blog.oss-cn-beijing.aliyuncs.com/Redis%20Cluster.png" alt="分片模式"><br>Redis Cluster模式即分片模式，从上图的三主三备的架构来看，Redis Cluster集群与上面两种集群最大的区别在于这种模式下存在多个Master节点。Redis 集群有16384个哈希槽,每个key通过CRC16校验后对16384取模来决定放置哪个槽.集群的每个节点负责一部分hash槽，在这种模式下对业务方来说，每次读写操作可能需要N次才能成功，N=Master节点数量。这种模式其实采用的是分布式系统横向拆分的一种思路，通过设置多个Master进行读写，那么Master节点本身的瓶颈就不再是问题。同时Master节点互相监控，相对于哨兵模式，少了Sentinel集群，系统复杂度和稳定性都更加优秀。因此Redis Cluster集群模式为Redis官方推荐的集群模式。</p>
 <h2 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a>数据同步</h2><p>上面我们将了Redis三种集群模式，不管采用哪种集群模式，Redis主从节点之间数据同步的原理都是一致的，下面我们再来看看Redis主从节点是怎么进行同步的。</p>
-###全量同步
-无论是初次连接还是重新连接，当建立一个从节点时，从节点都会像主节点发送**SYNC**命令。接到**SYNC**的主节点将开始执行**BGSAVE**，并在保存操作执行期间，将所有新执行的命令写到一个缓冲区里面。当**BGSAVE**执行完毕后，主节点将生成的RDB文件发送给从节点，从节点接收这个RDB文件并将数据加载到内存。
-当从节点把RDB数据加载到内存之后，那么截止到主节点接收到**SYNC**时，从节点的数据和主节点的数据就已经一致了。那么主节点在执行BGSAVE期间以及后续的数据一致性怎么保证呢？
-###命令广播
-在执行完同步操作之后，主从服务器之间数据库状态已经相同了。但这个状态并非一成不变，如果主服务器执行了写操作，那么主服务器的数据库状态就会修改，并导致主从服务器状态不再一致。所以为了让主从服务器再次回到一致状态，主服务器需要对从服务器执行命令传播操作：主服务器会将自己执行的写命令，也即是造成主从服务器不一致的那条写命令，发送给从服务器执行，当从服务器执行了相同的写命令之后，主从服务器将再次回到一致状态。
-**BGSAVE**期间以及后续的数据一致性都通过命令广播的方式，在从节点上再执行一遍，这样就保证了主从节点的一致性。
-###增量同步
-在Redis2.8以前，如果因为网络问题，从服务器与主服务器断开，那么重连以后需要重新进行全量同步。
-从 Redis 2.8 开始， 在网络连接短暂性失效之后， 主从服务器可以尝试继续执行原有的复制进程（process）， 而不一定要执行完整重同步操作。
-
+<h3 id="全量同步"><a href="#全量同步" class="headerlink" title="全量同步"></a>全量同步</h3><p>无论是初次连接还是重新连接，当建立一个从节点时，从节点都会像主节点发送<strong>SYNC</strong>命令。接到<strong>SYNC</strong>的主节点将开始执行<strong>BGSAVE</strong>，并在保存操作执行期间，将所有新执行的命令写到一个缓冲区里面。当<strong>BGSAVE</strong>执行完毕后，主节点将生成的RDB文件发送给从节点，从节点接收这个RDB文件并将数据加载到内存。<br>当从节点把RDB数据加载到内存之后，那么截止到主节点接收到<strong>SYNC</strong>时，从节点的数据和主节点的数据就已经一致了。那么主节点在执行BGSAVE期间以及后续的数据一致性怎么保证呢？</p>
+<h3 id="命令广播"><a href="#命令广播" class="headerlink" title="命令广播"></a>命令广播</h3><p>在执行完同步操作之后，主从服务器之间数据库状态已经相同了。但这个状态并非一成不变，如果主服务器执行了写操作，那么主服务器的数据库状态就会修改，并导致主从服务器状态不再一致。所以为了让主从服务器再次回到一致状态，主服务器需要对从服务器执行命令传播操作：主服务器会将自己执行的写命令，也即是造成主从服务器不一致的那条写命令，发送给从服务器执行，当从服务器执行了相同的写命令之后，主从服务器将再次回到一致状态。<br><strong>BGSAVE</strong>期间以及后续的数据一致性都通过命令广播的方式，在从节点上再执行一遍，这样就保证了主从节点的一致性。</p>
+<h3 id="增量同步"><a href="#增量同步" class="headerlink" title="增量同步"></a>增量同步</h3><p>在Redis2.8以前，如果因为网络问题，从服务器与主服务器断开，那么重连以后需要重新进行全量同步。<br>从 Redis 2.8 开始， 在网络连接短暂性失效之后， 主从服务器可以尝试继续执行原有的复制进程（process）， 而不一定要执行完整重同步操作。</p>
 <p>这个特性需要主服务器为被发送的复制流创建一个内存缓冲区（in-memory backlog）， 并且主服务器和所有从服务器之间都记录一个复制偏移量（replication offset）和一个主服务器 ID （master run id）， 当出现网络连接断开时， 从服务器会重新连接， 并且向主服务器请求继续执行原来的复制进程：</p>
 <p>如果从服务器记录的主服务器 ID 和当前要连接的主服务器的 ID 相同， 并且从服务器记录的偏移量所指定的数据仍然保存在主服务器的复制流缓冲区里面， 那么主服务器会向从服务器发送断线时缺失的那部分数据， 然后复制工作可以继续执行。<br>否则的话， 从服务器就要执行完整重同步操作。</p>
 
@@ -346,7 +333,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群模式"><span class="nav-number">1.</span> <span class="nav-text">集群模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据同步"><span class="nav-number">2.</span> <span class="nav-text">数据同步</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群模式"><span class="nav-number">1.</span> <span class="nav-text">集群模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主从模式"><span class="nav-number">1.1.</span> <span class="nav-text">主从模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哨兵模式"><span class="nav-number">1.2.</span> <span class="nav-text">哨兵模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分片模式"><span class="nav-number">1.3.</span> <span class="nav-text">分片模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据同步"><span class="nav-number">2.</span> <span class="nav-text">数据同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全量同步"><span class="nav-number">2.1.</span> <span class="nav-text">全量同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令广播"><span class="nav-number">2.2.</span> <span class="nav-text">命令广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增量同步"><span class="nav-number">2.3.</span> <span class="nav-text">增量同步</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
